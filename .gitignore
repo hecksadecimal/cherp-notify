@@ -1,0 +1,4 @@
+*.exe
+*.json
+*.txt
+__debug_bin
