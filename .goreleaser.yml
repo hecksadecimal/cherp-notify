@@ -4,12 +4,24 @@ before:
   hooks:
     - go mod download
 builds:
-  - env:
+  - id: darwin
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=1
+      - CC=/home/runner/work/osxcross/target/bin/o64-clang
+      - CXX=/home/runner/work/osxcross/target/bin/o64-clang++
+    ldflags:
+      - -s
+    goos:
+      - darwin
+    goarch:
+      - amd64
+  - id: linux-win
+    env:
       - GO111MODULE=on
       - CGO_ENABLED=1
     goos:
       - linux
-      - darwin
       - windows
     goarch:
       - 386
