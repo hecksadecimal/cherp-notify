@@ -15,7 +15,7 @@ jobs:
             fetch-depth: 0
 
       - name: Install deps
-        run: sudo apt-get install libappindicator3-dev gir1.2-appindicator3-0.1
+        run: sudo apt-get install libappindicator3-dev gir1.2-appindicator3-0.1 gcc-multilib
 
       - name: OSXCross for CGO Support
         run: |
