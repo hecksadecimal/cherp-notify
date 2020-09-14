@@ -3,6 +3,8 @@ module github.com/hecksadecimal/cherp-notify
 go 1.14
 
 require (
+	github.com/cratonica/2goarray v0.0.0-20190331194516-514510793eaa // indirect
+	github.com/getlantern/systray v1.0.4
 	github.com/google/go-cmp v0.5.2
 	github.com/juju/go4 v0.0.0-20160222163258-40d72ab9641a // indirect
 	github.com/juju/persistent-cookiejar v0.0.0-20171026135701-d5e5a8405ef9
