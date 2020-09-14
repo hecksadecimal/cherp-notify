@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/signal"
 	"runtime"
 	"sync"
 	"syscall"
@@ -232,7 +233,15 @@ func main() {
 
 	onExit := func() {
 		gStop <- true
+		log.Println("Exiting...")
 	}
+
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		systray.Quit()
+	}()
 
 	systray.Run(onReady, onExit)
 }
