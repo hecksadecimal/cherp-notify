@@ -31,10 +31,30 @@ var gClient http.Client
 var gNotifObject map[string]interface{}
 var gStop chan bool
 
+// Cherp now has a CSRF protection mechanism we need to be aware of.
+func getCSRF(c *http.Client) (data map[string]interface{}) {
+	resp, err := c.Get("https://cherp.chat/api/csrf")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	var jsonData map[string]interface{}
+	scanner := bufio.NewScanner(resp.Body)
+	for i := 0; scanner.Scan() && i < 5; i++ {
+		data := scanner.Text()
+		json.Unmarshal([]byte(data), &jsonData)
+	}
+	if err := scanner.Err(); err != nil {
+		panic(err)
+	}
+	return jsonData
+}
+
 // Typically used on first start to get a cookie for all future sessions.
 // Username and password are *never* saved.
 func login(c *http.Client, user string, pass string) (success bool) {
-	resp, err := c.PostForm("https://cherp.chat/api/user/login", url.Values{"username": {user}, "password": {pass}})
+	csrf := getCSRF(c)
+	resp, err := c.PostForm("https://cherp.chat/api/user/login", url.Values{"username": {user}, "password": {pass}, "csrfname": {csrf["csrfname"].(string)}, "csrf": {csrf["csrf"].(string)}})
 	if err != nil {
 		log.Fatal(err)
 	}
